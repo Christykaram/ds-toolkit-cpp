@@ -2,6 +2,7 @@
 #define DS_TOOLKIT_STACK_HPP
 
 #include <cstddef>
+#include <stdexcept>
 
 namespace ds {
 
@@ -27,6 +28,32 @@ public:
     void push(const T& value) {
         head_ = new Node{value, head_};
         ++size_;
+    }
+
+    // Removes the top value. Throws if the stack is empty.
+    void pop() {
+        if (head_ == nullptr) {
+            throw std::runtime_error("Stack::pop() called on empty stack");
+        }
+        Node* old = head_;
+        head_ = head_->next;
+        delete old;
+        --size_;
+    }
+
+    // Returns a reference to the top value. Throws if the stack is empty.
+    T& top() {
+        if (head_ == nullptr) {
+            throw std::runtime_error("Stack::top() called on empty stack");
+        }
+        return head_->value;
+    }
+
+    const T& top() const {
+        if (head_ == nullptr) {
+            throw std::runtime_error("Stack::top() called on empty stack");
+        }
+        return head_->value;
     }
 
     bool empty() const { return size_ == 0; }
