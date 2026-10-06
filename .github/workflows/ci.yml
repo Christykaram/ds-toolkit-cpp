@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v4
+
+      - name: Build demo program
+        run: g++ -std=c++17 -Wall -Wextra -Iinclude src/main.cpp -o demo
+
+      - name: Build and run Stack tests
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Iinclude tests/test_stack.cpp -o test_stack
+          ./test_stack
+
+      - name: Build and run Queue tests
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Iinclude tests/test_queue.cpp -o test_queue
+          ./test_queue
